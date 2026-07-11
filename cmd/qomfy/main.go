@@ -9,8 +9,9 @@ import (
 )
 
 func main() {
-	if err := commands.RootCmd.Execute(); err != nil {
-		// Cobra already prints the error; ensure a non-zero exit.
+	cmd, err := commands.RootCmd.ExecuteC()
+	if err != nil {
+		commands.PrintError(cmd, err)
 		os.Exit(1)
 	}
 }

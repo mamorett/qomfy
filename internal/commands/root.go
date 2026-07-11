@@ -37,7 +37,83 @@ var RootCmd = &cobra.Command{
 	Long:  "qomfy submits ComfyUI API-prompt workflows to a server and downloads the generated outputs.",
 }
 
+// Logo is the ASCII art logo for qomfy.
+const Logo = `  ___   ___  __  __ _____ __   __
+ / _ \ / _ \|  \/  |  ___|\ \ / /
+| | | | | | | |\/| | |_    \ V / 
+| |_| | |_| | |  | |  _|    | |  
+ \__\_\\___/|_|  |_|_|      |_|  `
+
+// PrintCustomHelp formats and prints help for the given command.
+func PrintCustomHelp(cmd *cobra.Command) {
+	fmt.Println(Logo)
+	fmt.Println()
+
+	fmt.Printf("Usage of %s:\n", cmd.Name())
+	if cmd.HasSubCommands() {
+		fmt.Printf("  %s [command]\n\n", cmd.CommandPath())
+	} else {
+		fmt.Printf("  %s [flags]\n\n", cmd.CommandPath())
+	}
+
+	if cmd.HasSubCommands() {
+		fmt.Println("Available Commands:")
+		for _, sub := range cmd.Commands() {
+			if sub.Hidden {
+				continue
+			}
+			fmt.Printf("  %-20s %s\n", sub.Name(), sub.Short)
+		}
+		fmt.Println()
+	}
+
+	usages := cmd.LocalFlags().FlagUsages()
+	if usages != "" {
+		fmt.Println("Options:")
+		lines := strings.Split(strings.TrimRight(usages, "\n"), "\n")
+		for _, line := range lines {
+			fmt.Printf("  %s\n", line)
+		}
+		fmt.Println()
+	}
+
+	inheritedUsages := cmd.InheritedFlags().FlagUsages()
+	if inheritedUsages != "" {
+		fmt.Println("Global Options:")
+		lines := strings.Split(strings.TrimRight(inheritedUsages, "\n"), "\n")
+		for _, line := range lines {
+			fmt.Printf("  %s\n", line)
+		}
+		fmt.Println()
+	}
+
+	if cmd.Example != "" {
+		fmt.Println("Examples:")
+		lines := strings.Split(strings.TrimRight(cmd.Example, "\n"), "\n")
+		for _, line := range lines {
+			fmt.Printf("  %s\n", line)
+		}
+		fmt.Println()
+	}
+}
+
+// PrintError formats and prints command execution errors.
+func PrintError(cmd *cobra.Command, err error) {
+	fmt.Fprintf(os.Stderr, "\x1b[31m✗ Error:\x1b[0m %s\n", err.Error())
+	PrintCustomHelp(cmd)
+}
+
 func init() {
+	RootCmd.SilenceUsage = true
+	RootCmd.SilenceErrors = true
+	RootCmd.SetHelpFunc(func(cmd *cobra.Command, args []string) {
+		PrintCustomHelp(cmd)
+	})
+	RootCmd.SetUsageFunc(func(cmd *cobra.Command) error {
+		PrintCustomHelp(cmd)
+		return nil
+	})
+
 	RootCmd.PersistentFlags().StringVar(&flagConfig, "config", "", "Path to config.json (lookup order: --config, $QOMFY_CONFIG, $XDG_CONFIG_HOME/qomfy/config.json, ~/.config/qomfy/config.json)")
 	RootCmd.PersistentFlags().StringVar(&flagClientID, "client-id", "", "ComfyUI client_id (random UUID each run if omitted)")
 	RootCmd.PersistentFlags().Float64Var(&flagPollInterval, "poll-interval", 0, "Polling interval in seconds (default 2.0 or config value)")
@@ -166,7 +242,7 @@ func echoChanges(changes []string) {
 // die prints an error message to stderr and exits non-zero (mirrors typer's
 // BadParameter exit behavior).
 func die(format string, args ...interface{}) {
-	fmt.Fprintf(os.Stderr, format+"\n", args...)
+	fmt.Fprintf(os.Stderr, "\x1b[31m✗ Error:\x1b[0m "+format+"\n", args...)
 	os.Exit(1)
 }
 
