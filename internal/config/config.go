@@ -130,7 +130,7 @@ func DefaultWorkflowsDir() string {
 
 // DefaultServerURL is the value used by `qomfy config init` when --server-url
 // is not supplied, matching cc.py.
-const DefaultServerURL = "http://mgmacpro2019:8188/"
+const DefaultServerURL = "http://localhost:8188/"
 
 // NewForInit builds a config object for writing via `config init`. Only the
 // server_url is serialized (other fields are omitted via omitempty), matching
