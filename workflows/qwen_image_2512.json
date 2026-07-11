@@ -1,0 +1,42 @@
+{
+  "1": {
+    "class_type": "CLIPTextEncode",
+    "_meta": { "title": "Positive Prompt" },
+    "inputs": { "text": "", "clip": ["2", 0] }
+  },
+  "2": {
+    "class_type": "CLIPTextEncode",
+    "_meta": { "title": "Negative Prompt" },
+    "inputs": { "text": "", "clip": ["3", 0] }
+  },
+  "3": {
+    "class_type": "KSampler",
+    "_meta": { "title": "KSampler" },
+    "inputs": { "seed": 0, "steps": 4, "cfg": 1.0, "sampler_name": "euler", "scheduler": "simple", "denoise": 1.0, "model": ["4", 0], "positive": ["1", 0], "negative": ["2", 0], "latent_image": ["5", 0] }
+  },
+  "4": {
+    "class_type": "UNETLoader",
+    "_meta": { "title": "Load Diffusion Model" },
+    "inputs": { "unet_name": "qwen_image_2512.safetensors", "weight_dtype": "default" }
+  },
+  "5": {
+    "class_type": "EmptyLatentImage",
+    "_meta": { "title": "Empty Latent Image" },
+    "inputs": { "width": 1024, "height": 1024, "batch_size": 1 }
+  },
+  "6": {
+    "class_type": "VAEDecode",
+    "_meta": { "title": "VAE Decode" },
+    "inputs": { "samples": ["3", 0], "vae": ["7", 0] }
+  },
+  "7": {
+    "class_type": "VAELoader",
+    "_meta": { "title": "Load VAE" },
+    "inputs": { "vae_name": "ae.safetensors" }
+  },
+  "8": {
+    "class_type": "SaveImage",
+    "_meta": { "title": "Save Image" },
+    "inputs": { "images": ["6", 0], "filename_prefix": "ComfyUI" }
+  }
+}

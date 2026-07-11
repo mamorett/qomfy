@@ -1,0 +1,17 @@
+# Mirror of godel/config/dist-plugin.yml.
+# Keeps the qomfy product definition (build + dist layout) so it can be edited
+# in one place and copied into godel/config/ at install time.
+products:
+  qomfy:
+    build:
+      main-pkg: ./cmd/qomfy
+      output-dir: out/build
+      os-archs:
+        - os: linux
+          arch: amd64
+        - os: linux
+          arch: arm64
+        - os: darwin
+          arch: arm64
+    dist:
+      output-dir: out/dist

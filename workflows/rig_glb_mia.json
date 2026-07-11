@@ -1,0 +1,17 @@
+{
+  "1": {
+    "class_type": "Hy3DUploadMesh",
+    "_meta": { "title": "Upload Mesh" },
+    "inputs": { "mesh": "example.glb", "use_decimate": false }
+  },
+  "2": {
+    "class_type": "MIAAutoRig",
+    "_meta": { "title": "MIA Auto Rig" },
+    "inputs": { "fbx_name": "ComfyUI", "mesh": ["1", 0], "no_fingers": false, "use_normal": false, "reset_to_rest": false, "bone_naming": "Blender", "auto_rig": true }
+  },
+  "3": {
+    "class_type": "Trellis2ExportMesh",
+    "_meta": { "title": "Trellis Export Mesh" },
+    "inputs": { "filename_prefix": "ComfyUI", "mesh": ["2", 0] }
+  }
+}

@@ -1,0 +1,25 @@
+# Mirror of godel/config/godel.yml for the qomfy product layout.
+# Kept in sync with godel/config/godel.yml.
+cfg:
+  build:
+    build-args: "-trimpath -ldflags='-s -w'"
+    output-dir: out/build
+    main-pkg: ./cmd/qomfy
+  cross-compile:
+    os-archs:
+      - os: linux
+        arch: amd64
+      - os: linux
+        arch: arm64
+      - os: darwin
+        arch: arm64
+  test:
+    tags: ""
+    args: "-v -race -count=1"
+  format:
+    exclude:
+      - "vendor"
+  check:
+    skip:
+      - "unconvert"
+      - "varcheck"

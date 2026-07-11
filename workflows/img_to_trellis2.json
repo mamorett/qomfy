@@ -1,0 +1,32 @@
+{
+  "1": {
+    "class_type": "LoadImage",
+    "_meta": { "title": "Load Image" },
+    "inputs": { "image": "example.png", "upload": "image" }
+  },
+  "2": {
+    "class_type": "Trellis2MeshWithVoxelAdvancedGenerator",
+    "_meta": { "title": "Trellis Mesh Generator" },
+    "inputs": { "seed": 0, "image": ["1", 0], "surface_mode": "trellis", "simplify": 0.95, "texture_size": 1024, "mesh_rotation": 0.0 }
+  },
+  "3": {
+    "class_type": "Trellis2MeshTexturing",
+    "_meta": { "title": "Trellis Mesh Texturing" },
+    "inputs": { "seed": 0, "mesh": ["2", 0], "image": ["1", 0], "apply_mask": true }
+  },
+  "4": {
+    "class_type": "Trellis2SimplifyMesh",
+    "_meta": { "title": "Trellis Simplify Mesh" },
+    "inputs": { "target_face_num": 40000, "mesh": ["3", 0] }
+  },
+  "5": {
+    "class_type": "Trellis2ExportMesh",
+    "_meta": { "title": "Trellis Export Mesh" },
+    "inputs": { "filename_prefix": "ComfyUI", "mesh": ["4", 0] }
+  },
+  "6": {
+    "class_type": "SaveImage",
+    "_meta": { "title": "Save Image" },
+    "inputs": { "images": ["1", 0], "filename_prefix": "ComfyUI" }
+  }
+}

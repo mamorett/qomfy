@@ -1,0 +1,14 @@
+products:
+  qomfy:
+    build:
+      main-pkg: ./cmd/qomfy
+      output-dir: out/build
+      os-archs:
+        - os: linux
+          arch: amd64
+        - os: linux
+          arch: arm64
+        - os: darwin
+          arch: arm64
+    dist:
+      output-dir: out/dist
